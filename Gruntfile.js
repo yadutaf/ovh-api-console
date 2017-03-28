@@ -69,7 +69,7 @@ module.exports = function ( grunt ) {
         server: {
             options: {
                 keepalive: true,
-                port: 8000,
+                port: 9000,
                 hostname: '*',
                 base: 'build'
             }
