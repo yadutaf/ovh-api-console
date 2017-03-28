@@ -1,8 +1,8 @@
 <div class="row">
     <div class="col-xs-12">
-
+        <div class="alert alert-info" data-ng-if="global.apiFilter && !(apiList.apis | filter:{'path': global.apiFilter}).length">No results.</div>
         <ul id="root-list" class="list-unstyled">
-            <li class="panel" data-ng-repeat="api in apiList.apis | orderBy:'path' track by api.path">
+            <li class="panel" data-ng-repeat="api in apiList.apis | filter:{'path': global.apiFilter} | orderBy:'path' track by api.path">
 
                 <!-- header -->
                 <div class="panel-heading clearfix">
@@ -11,7 +11,7 @@
                     </a>
                     <span class="loading top-space-m10 left-space-m20" data-ng-if="api.loading"></span>
                     <div class="pull-right">
-                        <input type="text" class="form-control input-sm api-search-input" placeholder="Filter..."
+                        <input type="text" class="form-control input-sm api-search-input" placeholder="Filter APIs..."
                             data-ng-model="api.filter" data-ng-init="api.filter = ''" data-ng-if="api.visible && !api.loading && !api.viewRAW" />
                         <button type="button" class="btn btn-link api-view-btn"
                                 data-ng-click="collapseAll(api)"

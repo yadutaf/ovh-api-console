@@ -27,6 +27,12 @@
           <!-- TODO bind to configuration / Generate from endpoint -->
           <a class="navbar-brand" href="#">OVH API Console</a>
         </div>
+        <form class="navbar-form navbar-left" role="filter" data-ng-controller="ApiCtrl">
+          <div class="form-group">
+            <input type="text" class="form-control input-sm api-search-input" placeholder="Filter..."
+              data-ng-model="global.apiFilter" placeholder="Filter APIs...">
+          </div>
+        </form>
         <div id="navbar" class="collapse navbar-collapse" data-ng-controller="SessionCtrl">
           <form class="navbar-form navbar-right" data-ng-if="isLogged" data-ng-submit="logout()">
             <div class="inline middle right-space-m15" data-ng-if="me" style="color: white">

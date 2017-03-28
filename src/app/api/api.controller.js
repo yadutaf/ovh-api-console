@@ -2,6 +2,7 @@ angular.module('consoleApp').controller('ApiCtrl', function ($scope, $timeout, O
     'use strict';
 
     $scope.isLogged = false;
+    $scope.global = Api;
 
     function init () {
         $scope.isLogged = Ovh.isLogged();
