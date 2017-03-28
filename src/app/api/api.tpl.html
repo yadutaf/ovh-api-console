@@ -71,7 +71,6 @@
                                             <tr>
                                                 <th>Parameter</th>
                                                 <th>Value</th>
-                                                <th>&nbsp;</th>
                                                 <th>Data Type</th>
                                             </tr>
                                         </thead>
@@ -90,16 +89,17 @@
 
                                                 <!-- classic or enum -->
                                                 <td data-ng-if="!param.isModel || (param.isModel && param.isEnum)">
+                                                    <!-- field -->
                                                     <div data-ng-include="'api/api.simpleType.tpl.html'"></div>
-                                                </td>
 
-                                                <!-- description -->
-                                                <td data-ng-if="!param.isModel || (param.isModel && param.isEnum)" class="text-muted">
-                                                    {{ param.description || '&nbsp;' }}
+                                                    <!-- description -->
+                                                    <p class="text-muted">
+                                                        {{ param.description || '&nbsp;' }}
+                                                    </p>
                                                 </td>
 
                                                 <!-- type -->
-                                                <td>
+                                                <td class="col-data-type" data-ng-if="!param.isModel || param.isEnum">
                                                     {{ param.dataType }}
                                                 </td>
                                             </tr>

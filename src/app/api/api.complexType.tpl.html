@@ -1,6 +1,15 @@
-<p class="text-muted">{{ param.description || '/' }}</p>
 
 <table class="table table-condensed">
+    <thead>
+        <tr>
+            <th colspan="2" class="text-muted">
+                {{ param.description || '/' }}
+            </th>
+            <th class="col-data-type">
+                {{ param.dataType || '/' }}
+            </th>
+        </tr>
+    </thead>
     <tbody>
         <tr data-ng-repeat="param in param.modelProperties">
 
@@ -14,11 +23,17 @@
 
             <!-- classic or enum -->
             <td data-ng-if="!param.isModel || (param.isModel && param.isEnum)">
+                <!-- field -->
                 <div data-ng-include="'api/api.simpleType.tpl.html'"></div>
+
+                <!-- description -->
+                <p class="text-muted">
+                    {{ param.description || '&nbsp;' }}
+                </p>
             </td>
 
             <!-- type -->
-            <td>{{param.dataType}}</td>
+            <td class="col-data-type">{{param.dataType}}</td>
 
         </tr>
     </tbody>
