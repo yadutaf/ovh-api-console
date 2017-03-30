@@ -1,4 +1,4 @@
-angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh) {
+angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh, $http) {
     'use strict';
 
     // You can hide APIs: just add its path into this array:
@@ -119,6 +119,7 @@ angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh) {
                             description : api.description,
                             operation   : operation,
                             examples    : {},
+                            docs        : {},
                         };
 
                         // initial code sample build
@@ -128,6 +129,22 @@ angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh) {
                         $rootScope.$watch(function() {return operation;}, function(operation, oldOperation) {
                             buildCodeExamples(subApiRoute);
                         }, true);
+
+                        // Load documentation
+                        $http({
+                            method  : 'GET',
+                            url     : '/assets/docs' + api.path + '/' + operation.httpMethod.toLowerCase() + '.md'
+                        }).then(function (res) {
+                            var converter = new showdown.Converter(),
+                                html = converter.makeHtml(res.data);
+
+                            console.log(html);
+
+                            subApiRoute.docs = html;
+                            return res.data;
+                        }, function (error) {
+                            return $q.reject(error);
+                        });
 
                         // Here it is
                         subApiList.push(subApiRoute);

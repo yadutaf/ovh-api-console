@@ -54,6 +54,8 @@
 
                                 <p class="italic">{{ subApi.operation.description}}</p>
 
+                                <p ng-bind-html="subApi.docs"></p>
+
                                 <p data-ng-if="subApi.operation.apiStatus.value !== 'PRODUCTION'">
                                     API status: <strong>{{ subApi.operation.apiStatus.value }}</strong>
                                     <span data-ng-if="subApi.operation.apiStatus.value === 'DEPRECATED'">

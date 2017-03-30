@@ -72,7 +72,8 @@ module.exports = {
       'vendor/URIjs/src/URI.js',
       'vendor/ng-ovh/ng-ovh.js',
       'vendor/scrollup/dist/jquery.scrollUp.min.js',
-      'vendor/jquery-jsonview/dist/jquery.jsonview.js'
+      'vendor/jquery-jsonview/dist/jquery.jsonview.js',
+      'vendor/showdown/dist/showdown.min.js'
     ],
     css: [
       'vendor/jquery-jsonview/dist/jquery.jsonview.css'
