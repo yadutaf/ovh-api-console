@@ -137,12 +137,11 @@ angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh) {
         }
     }
 
-    this.requestApi = function (api) {
-
+    function buildParameters(parameters) {
         var config = {};
 
         // parse params
-        _.forEach(api.operation.parameters, function (param) {
+        _.forEach(parameters, function (param) {
 
             // if complex type, go into its properties, else simply takes param
             _.forEach(( (param.isModel && !param.isEnum) ? param.modelProperties : [param]), function (_param) {
@@ -163,6 +162,12 @@ angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh) {
                 }
             });
         });
+
+        return config;
+    }
+
+    this.requestApi = function (api) {
+        var config = buildParameters;
 
         if (api.operation.noAuthentication) {
             config.noAuthentication = true;
