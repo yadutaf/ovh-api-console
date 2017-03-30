@@ -60,11 +60,73 @@ angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh) {
 
     }
 
+    // Build a hash of parameters that are either mandatory either set by the
+    // user. A field will be included if at least one of these is true:
+    // - required is 1
+    // - value is set
+    // - inputMode is not 'input' (other values are null, empty)
+    // If a required parameter is not set, we'll set it to null
+    function buildParametersForExamples(parameters) {
+        _.forEach(parameters, function (param) {
+            // Consider all arguments, except path arguments
+            if (param.paramType !== 'path') {
+                // console.log(param);
+                // isModel --> true / false
+                // dataType --> string, boolean, text, ...
+            }
+        });
+    }
+
     // Build code samples
     function buildCodeExamples(subApi) {
+        var method = subApi.operation.httpMethod.toLowerCase();
+        var path = subApi.path;
+
+        // Build Path
+        _.forEach(subApi.operation.parameters, function (param) {
+            if (param.paramType === 'path' && param.value) {
+                path = path.replace('{' + param.name + '}', encodeURIComponent(param.value));
+            }
+        });
+
+        // Build parameters, as sent to the API
+        var parameters = buildParameters(subApi.operation.parameters);
+        console.log(parameters);
+
+        // Build Python
+        var python = [];
+        python.push("# coding: utf-8");
+        python.push("'''");
+        python.push("First, install the latest release of Python wrapper: $ pip install ovh");
+        python.push("'''");
+        python.push("");
+        python.push("import json");
+        python.push("import ovh");
+        python.push("");
+        python.push("# Instanciate an OVH Client.");
+        python.push("# You can generate new credentials with full access to your account on");
+        python.push("# The token creation page: https://api.ovh.com/createToken/index.cgi?GET=/*&PUT=/*&POST=/*&DELETE=/*");
+        python.push("client = ovh.Client(");
+        python.push("    endpoint           = 'ovh-eu',     # Endpoint of API OVH Europe"); // TODO: use config to set the correct endpoint
+        python.push("    application_key    = 'xxxxxxxxxx', # Application Key");
+        python.push("    application_secret = 'xxxxxxxxxx', # Application Secret");
+        python.push("    consumer_key       = 'xxxxxxxxxx', # Consumer Key");
+        python.push(")");
+        python.push("");
+        if (parameters) {
+            python.push("result = client."+method+"('"+path+",");
+            python.push("    # TODO");
+            python.push(")");
+        } else {
+            python.push("result = client."+method+"('"+path+"')");
+        }
+        python.push("");
+        python.push("# Pretty print();");
+        python.push("print json.dumps(result, indent=4)");
+
         // POC: build python code sample
         var examples = {
-            'python': {name: "Python", code: "print 'Hello Python !'"},
+            'python': {name: "Python", code: python.join('\n')},
             'php':    {name: "PHP",    code: "echo 'Hello PHP';"},
         };
 
