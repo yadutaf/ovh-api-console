@@ -86,6 +86,17 @@ angular.module('consoleApp').controller('ApiCtrl', function ($scope, $timeout, O
         }
     };
 
+    $scope.addListItem = function(param) {
+        console.log("addListItem to", param);
+        var itemParams = angular.copy(param);
+        itemParams.isList = false;
+        itemParams.value = undefined;
+        param.value.push(itemParams);
+    };
+
+    $scope.delListItem = function(param, index) {
+        param.value.splice(index, 1);
+    };
 
     init();
 

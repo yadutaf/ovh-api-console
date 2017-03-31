@@ -1,0 +1,44 @@
+<table class="table table-condensed table-type-list">
+    <tbody data-ng-init="parentParam = param">
+        <tr data-ng-repeat="param in param.value">
+
+            <!-- can be again a complex type -->
+            <td data-ng-if="param.isModel && !param.isList && !param.isEnum">
+                <div data-ng-include="'api/api.complexType.tpl.html'"></div>
+            </td>
+
+            <!-- lists -->
+            <td data-ng-if="param.isList">
+                <div data-ng-include="'api/api.listType.tpl.html'"></div>
+            </td>
+
+            <!-- classic or enum -->
+            <td data-ng-if="!param.isList && (!param.isModel || (param.isModel && param.isEnum))">
+                <div data-ng-include="'api/api.simpleType.tpl.html'"></div>
+            </td>
+
+            <!-- 'remove item' button -->
+            <td class="action-col">
+                <a class="btn btn-danger input-sm" data-ng-click="delListItem(parentParam, $index)">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <!-- description -->
+            <td>
+                <p class="text-muted">
+                  {{ param.description || '/' }}
+                </p>
+            </td>
+
+            <!-- 'add item' button -->
+            <td class="action-col">
+                <a class="btn btn-success input-sm" data-ng-click="addListItem(parentParam)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

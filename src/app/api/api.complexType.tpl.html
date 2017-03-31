@@ -1,5 +1,5 @@
 
-<table class="table table-condensed">
+<table class="table table-condensed table-type-complex">
     <thead>
         <tr>
             <th colspan="2" class="text-muted">
@@ -17,12 +17,17 @@
             <td>{{param.name}}</td>
 
             <!-- can be again a complex type -->
-            <td data-ng-if="param.isModel && !param.isEnum">
+            <td data-ng-if="param.isModel && !param.isList && !param.isEnum">
                 <div data-ng-include="'api/api.complexType.tpl.html'"></div>
             </td>
 
+            <!-- lists -->
+            <td data-ng-if="param.isList">
+                <div data-ng-include="'api/api.listType.tpl.html'"></div>
+            </td>
+
             <!-- classic or enum -->
-            <td data-ng-if="!param.isModel || (param.isModel && param.isEnum)">
+            <td data-ng-if="!param.isList && (!param.isModel || (param.isModel && param.isEnum))">
                 <!-- field -->
                 <div data-ng-include="'api/api.simpleType.tpl.html'"></div>
 

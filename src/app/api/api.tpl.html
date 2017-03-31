@@ -85,12 +85,17 @@
                                                 </td>
 
                                                 <!-- complex type -->
-                                                <td data-ng-if="param.isModel && !param.isEnum" colspan="2">
+                                                <td data-ng-if="param.isModel && !param.isList && !param.isEnum" colspan="2">
                                                     <div data-ng-include="'api/api.complexType.tpl.html'"></div>
                                                 </td>
 
+                                                <!-- lists -->
+                                                <td data-ng-if="param.isList">
+                                                    <div data-ng-include="'api/api.listType.tpl.html'"></div>
+                                                </td>
+
                                                 <!-- classic or enum -->
-                                                <td data-ng-if="!param.isModel || (param.isModel && param.isEnum)">
+                                                <td data-ng-if="!param.isList && (!param.isModel || (param.isModel && param.isEnum))">
                                                     <!-- field -->
                                                     <div data-ng-include="'api/api.simpleType.tpl.html'"></div>
 
@@ -102,7 +107,7 @@
 
                                                 <!-- type -->
                                                 <td class="col-data-type" data-ng-if="!param.isModel || param.isEnum">
-                                                    {{ param.dataType }}
+                                                    {{ param.dataType }}{{ param.isList ? ' list':'' }}
                                                 </td>
                                             </tr>
                                         </tbody>

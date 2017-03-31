@@ -110,3 +110,22 @@
         }
     }
 }
+
+.table .table-type-list {
+    /* remove the margin between the table and the description */
+    margin-bottom: 0px;
+
+    /* remove the background to prevent the strange 'white on grey' effect */
+    background-color: transparent;
+
+    /* remove border on 1st element and footer to avoid the double-border effect of nested tables */
+    tr:first-child td, tr:last-child td {
+        border-top: 0;
+    }
+
+    /* Make the action buttons column a reasonable *constant* size */
+    td.action-col {
+        width: 45px;
+    }
+}
+

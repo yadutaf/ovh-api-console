@@ -28,6 +28,14 @@ angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh, $http
 
         _.forEach(parameters, function (param, id) {
 
+            // parameter is a list ?
+            param.isList = false;
+            if (param.dataType.slice(-2) === "[]") {
+                param.dataType = param.dataType.slice(0, -2);
+                param.isList = true;
+                param.value = [];
+            }
+
             // parameter is a model?
             param.isModel = !!api.models[param.dataType];
 
@@ -353,22 +361,51 @@ angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh, $http
         });
     };
 
+    // Return true if value holds a valid data
+    function isDefined (value) {
+        if (value === false) {
+            // boolean a always valid
+            return true;
+        }
+        if (!value) {
+            // generic case
+            return false;
+        }
+        if (_.isArray(value) && !value.length) {
+            // empty arrays
+            return false;
+        }
+        return true;
+    }
+
     function getRequestParamValue (param) {
+        var ret = null;
+
         // complex type in complex type
-        if (param.isModel && !param.isEnum) {
-            var ret = {};
+        if (param.isList) {
+            ret = [];
+            _.forEach(param.value, function (_param) {
+                var paramValue = getRequestParamValue(_param);
+
+                // If the value evaluates to false, prune it, unless it is mandatory or explicitely marked as null by the user
+                if (isDefined(paramValue) || _param.required || (_param.inputMode !== 'input' && _param.inputMode !== undefined)) {
+                    ret.push(paramValue);
+                }
+            });
+        } else if (param.isModel && !param.isEnum) {
+            ret = {};
             _.forEach(param.modelProperties, function (_param) {
                 var paramValue = getRequestParamValue(_param);
 
                 // If the value evaluates to false, prune it, unless it is mandatory or explicitely marked as null by the user
-                if (paramValue || paramValue === false || param.required || (param.inputMode !== 'input' && param.inputMode !== undefined)) {
+                if (isDefined(paramValue) || _param.required || (_param.inputMode !== 'input' && _param.inputMode !== undefined)) {
                     ret[_param.name] = paramValue;
                 }
             });
-            return ret;
         } else {
-            return param.value;
+            ret = param.value;
         }
+        return ret;
     }
 
     function buildParameters(parameters) {
@@ -390,7 +427,7 @@ angular.module('consoleApp').service('Api', function ($rootScope, $q, Ovh, $http
             }
 
             // If the value evaluates to false, prune it, unless it is mandatory or explicitely marked as null by the user
-            if (paramValue || paramValue === false || param.required || (param.inputMode !== 'input' && param.inputMode !== undefined)) {
+            if (isDefined(paramValue) || param.required || (param.inputMode !== 'input' && param.inputMode !== undefined)) {
                 if (!config[paramCategory]) {
                     config[paramCategory] = {};
                 }
